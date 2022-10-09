@@ -1,0 +1,41 @@
+#! /c/iverilog/bin/vvp
+:ivl_version "0.9.7 " "(v0_9_7)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_010E4CA8 .scope module, "and2" "and2" 2 1;
+ .timescale 0 0;
+v010E4D30_0 .net "a", 0 0, C4<z>; 0 drivers
+v010E1730_0 .net "c", 0 0, L_010E34A0; 1 drivers
+L_010E34A0 .reduce/nor C4<z>;
+S_010E16A8 .scope module, "not2_test" "not2_test" 3 1;
+ .timescale 0 0;
+L_010E17E0 .functor NOT 1, v010E1788_0, C4<0>, C4<0>, C4<0>;
+v010E1788_0 .var "a", 0 0;
+v010E3448_0 .net "c", 0 0, L_010E17E0; 1 drivers
+    .scope S_010E16A8;
+T_0 ;
+    %delay 0, 0;
+    %set/v v010E1788_0, 0, 1;
+    %delay 100, 0;
+    %set/v v010E1788_0, 1, 1;
+    %end;
+    .thread T_0;
+    .scope S_010E16A8;
+T_1 ;
+    %vpi_call 3 12 "$monitor", $time, "a=%b, c=%b", v010E1788_0, v010E3448_0;
+    %end;
+    .thread T_1;
+    .scope S_010E16A8;
+T_2 ;
+    %vpi_call 3 16 "$dumpfile", "not2_test.vcd";
+    %vpi_call 3 17 "$dumpvars", 1'sb0, S_010E16A8;
+    %end;
+    .thread T_2;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "not2.v";
+    "not2_tb.v";

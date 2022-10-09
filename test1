@@ -1,0 +1,51 @@
+#! /c/iverilog/bin/vvp
+:ivl_version "0.9.7 " "(v0_9_7)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_01297C40 .scope module, "and2" "and2" 2 1;
+ .timescale 0 0;
+L_01298D88 .functor AND 1, C4<z>, C4<z>, C4<1>, C4<1>;
+v01291748_0 .net "a", 0 0, C4<z>; 0 drivers
+v012917A0_0 .net "b", 0 0, C4<z>; 0 drivers
+v01293538_0 .net "c", 0 0, L_01298D88; 1 drivers
+S_012916C0 .scope module, "and2_test" "and2_test" 3 1;
+ .timescale 0 0;
+L_01298DC0 .functor AND 1, v01293590_0, v012935E8_0, C4<1>, C4<1>;
+v01293590_0 .var "a", 0 0;
+v012935E8_0 .var "b", 0 0;
+v01293640_0 .net "c", 0 0, L_01298DC0; 1 drivers
+    .scope S_012916C0;
+T_0 ;
+    %delay 0, 0;
+    %set/v v01293590_0, 0, 1;
+    %set/v v012935E8_0, 0, 1;
+    %delay 100, 0;
+    %set/v v01293590_0, 0, 1;
+    %set/v v012935E8_0, 1, 1;
+    %delay 100, 0;
+    %set/v v01293590_0, 1, 1;
+    %set/v v012935E8_0, 0, 1;
+    %delay 100, 0;
+    %set/v v01293590_0, 1, 1;
+    %set/v v012935E8_0, 1, 1;
+    %end;
+    .thread T_0;
+    .scope S_012916C0;
+T_1 ;
+    %vpi_call 3 14 "$monitor", $time, "a=%b, b=%b, c=%b", v01293590_0, v012935E8_0, v01293640_0;
+    %end;
+    .thread T_1;
+    .scope S_012916C0;
+T_2 ;
+    %vpi_call 3 18 "$dumpfile", "and2_test.vcd";
+    %vpi_call 3 19 "$dumpvars", 1'sb0, S_012916C0;
+    %end;
+    .thread T_2;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "and2.v";
+    "and2_tb.v";
