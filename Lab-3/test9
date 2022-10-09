@@ -1,0 +1,48 @@
+#! /c/iverilog/bin/vvp
+:ivl_version "0.9.7 " "(v0_9_7)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_001F8570 .scope module, "halfadd_tb" "halfadd_tb" 2 1;
+ .timescale 0 0;
+v001F1760_0 .var "aa", 0 0;
+v001F86A8_0 .var "bb", 0 0;
+v001F8700_0 .net "cy", 0 0, L_001F8820; 1 drivers
+v001F8758_0 .net "ss", 0 0, L_001F3830; 1 drivers
+S_001F3CD0 .scope module, "add1" "halfadd" 2 7, 3 1, S_001F8570;
+ .timescale 0 0;
+L_001F3830 .functor XOR 1, v001F1760_0, v001F86A8_0, C4<0>, C4<0>;
+L_001F8820 .functor AND 1, v001F1760_0, v001F86A8_0, C4<1>, C4<1>;
+v001F3D58_0 .net "a", 0 0, v001F1760_0; 1 drivers
+v001F3DB0_0 .net "b", 0 0, v001F86A8_0; 1 drivers
+v001F16B0_0 .alias "cout", 0 0, v001F8700_0;
+v001F1708_0 .alias "sum", 0 0, v001F8758_0;
+    .scope S_001F8570;
+T_0 ;
+    %vpi_call 2 13 "$dumpfile", "half_add_test.vcd";
+    %vpi_call 2 15 "$dumpvars", 1'sb0, S_001F8570;
+    %end;
+    .thread T_0;
+    .scope S_001F8570;
+T_1 ;
+    %vpi_call 2 21 "$monitor", $time, "a=%b, b=%b, sum=%b, carry=%b", v001F1760_0, v001F86A8_0, v001F8758_0, v001F8700_0;
+    %set/v v001F1760_0, 0, 1;
+    %set/v v001F86A8_0, 0, 1;
+    %delay 5, 0;
+    %set/v v001F1760_0, 0, 1;
+    %set/v v001F86A8_0, 1, 1;
+    %delay 5, 0;
+    %set/v v001F1760_0, 1, 1;
+    %set/v v001F86A8_0, 0, 1;
+    %delay 5, 0;
+    %set/v v001F1760_0, 1, 1;
+    %set/v v001F86A8_0, 1, 1;
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "halfadd_tb.v";
+    "half_add.v";
